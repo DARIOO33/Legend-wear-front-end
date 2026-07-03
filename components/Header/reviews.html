@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Reviews</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Inter', sans-serif; 
+    }
+    
+    body { 
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #2c3e50;
+      font-weight: 700;
+      font-size: 2.5rem;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    h1:after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, #3498db, #2ecc71);
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    .reviews-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+    }
+
+    .review-card {
+      background-color: #fff;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .review-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    }
+
+    .review-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, #3498db, #2ecc71);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .avatar {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3498db, #2ecc71);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      margin-right: 15px;
+      flex-shrink: 0;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .review-user { 
+      font-weight: 600; 
+      color: #2c3e50; 
+      font-size: 1.1rem;
+    }
+    
+    .review-date { 
+      font-size: 0.85rem; 
+      color: #7f8c8d; 
+      margin-top: 3px;
+    }
+
+    .rating {
+      display: flex;
+      margin: 8px 0 12px;
+    }
+
+    .star {
+      color: #f1c40f;
+      margin-right: 2px;
+      font-size: 1rem;
+    }
+
+    .review-message {
+      font-size: 0.95rem;
+      color: #34495e;
+      margin-bottom: 18px;
+      line-height: 1.6;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .review-message:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: -5px;
+      font-size: 2.5rem;
+      color: #3498db;
+      opacity: 0.2;
+      font-family: Georgia, serif;
+    }
+
+    .review-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .detail-badge {
+      background-color: #e8f4fc;
+      color: #2980b9;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .detail-badge:hover {
+      transform: scale(1.05);
+    }
+
+    .recommendation { 
+      background-color: #e1f7e7; 
+      color: #27ae60; 
+    }
+
+    .service { 
+      background-color: #fef5e7; 
+      color: #f39c12; 
+    }
+
+    .product { 
+      background-color: #f4ecf7; 
+      color: #8e44ad; 
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .stat {
+      text-align: center;
+      flex: 1;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
+
+    @media (max-width: 768px) {
+      .stats-bar {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .reviews-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Client Reviews</h1>
+    
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-value">4.8</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">96%</div>
+        <div class="stat-label">Would Recommend</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">127</div>
+        <div class="stat-label">Total Reviews</div>
+      </div>
+    </div>
+
+    <div class="reviews-container">
+      <div class="review-card">
+        <div class="review-header">
+          <div class="avatar">M</div>
+          <div class="user-info">
+            <div class="review-user">Mohamed Ali Latrache</div>
+            <div class="review-date">Oct 2, 2025</div>
+            <div class="rating">
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="review-message">
+          I really want to see more stuff in the shop. You're doing great work guys! The quality is exceptional and customer service is top-notch.
+        </div>
+        <div class="review-details">
+          <div class="detail-badge service">Satisfaction: Very satisfied</div>
+          <div class="detail-badge service">Support: Exceeded expectations</div>
+          <div class="detail-badge product">Future Products: More accessories</div>
+          <div class="detail-badge recommendation">Recommend: Yes</div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <div class="avatar">S</div>
+          <div class="user-info">
+            <div class="review-user">Sarah Johnson</div>
+            <div class="review-date">Sep 28, 2025</div>
+            <div class="rating">
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="far fa-star"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="review-message">
+          Great products and fast shipping. The only reason I'm not giving 5 stars is because I wish there were more color options available.
+        </div>
+        <div class="review-details">
+          <div class="detail-badge service">Satisfaction: Satisfied</div>
+          <div class="detail-badge service">Delivery: Fast shipping</div>
+          <div class="detail-badge product">Improvement: More colors</div>
+          <div class="detail-badge recommendation">Recommend: Yes</div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <div class="avatar">R</div>
+          <div class="user-info">
+            <div class="review-user">Robert Chen</div>
+            <div class="review-date">Sep 25, 2025</div>
+            <div class="rating">
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star-half-alt"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="review-message">
+          Excellent customer service! They went above and beyond to help me with a special request. The product quality is outstanding.
+        </div>
+        <div class="review-details">
+          <div class="detail-badge service">Satisfaction: Very satisfied</div>
+          <div class="detail-badge service">Support: Exceptional</div>
+          <div class="detail-badge product">Quality: Outstanding</div>
+          <div class="detail-badge recommendation">Recommend: Yes</div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <div class="avatar">E</div>
+          <div class="user-info">
+            <div class="review-user">Emma Wilson</div>
+            <div class="review-date">Sep 20, 2025</div>
+            <div class="rating">
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+              <span class="star"><i class="fas fa-star"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="review-message">
+          Absolutely love everything about this company! The products are high quality, packaging is beautiful, and customer service is responsive.
+        </div>
+        <div class="review-details">
+          <div class="detail-badge service">Satisfaction: Very satisfied</div>
+          <div class="detail-badge service">Packaging: Excellent</div>
+          <div class="detail-badge product">Quality: High standard</div>
+          <div class="detail-badge recommendation">Recommend: Yes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
