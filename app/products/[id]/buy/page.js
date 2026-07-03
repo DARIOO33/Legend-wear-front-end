@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-
+const api = process.env.NEXT_PUBLIC_API_URL;
 export default function BuyPage() {
   const router = useRouter()
   const params = useParams()
@@ -50,23 +50,23 @@ export default function BuyPage() {
 
   const validateForm = () => {
     const errors = {}
-    
+
     if (!formData.name.trim()) {
       errors.name = 'Full name is required'
     }
-    
+
     if (!formData.phone.trim()) {
       errors.phone = 'Phone number is required'
     } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(formData.phone)) {
       errors.phone = 'Please enter a valid phone number'
     }
-    
+
     if (!formData.address.trim()) {
       errors.address = 'Shipping address is required'
     } else if (formData.address.trim().length < 10) {
       errors.address = 'Please provide a complete address'
     }
-    
+
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errors.email = 'Please enter a valid email address'
     }
@@ -76,100 +76,100 @@ export default function BuyPage() {
   }
 
   const generateOrderId = (order) => {
-  const initials = order.customerName
-    .split(' ')
-    .map(n => n[0].toUpperCase())
-    .join('');
+    const initials = order.customerName
+      .split(' ')
+      .map(n => n[0].toUpperCase())
+      .join('');
 
-  const productCode = order.items[0].product.slice(0, 4).toUpperCase();
+    const productCode = order.items[0].product.slice(0, 4).toUpperCase();
 
-  const date = new Date(order.orderDate);
-  const dateCode = `${date.getFullYear().toString().slice(2)}${(date.getMonth()+1)
-    .toString().padStart(2,'0')}${date.getDate().toString().padStart(2,'0')}${date.getHours().toString().padStart(2,'0')}${date.getMinutes().toString().padStart(2,'0')}`;
+    const date = new Date(order.orderDate);
+    const dateCode = `${date.getFullYear().toString().slice(2)}${(date.getMonth() + 1)
+      .toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}`;
 
-  const randomStr = Math.random().toString(36).substr(2,4).toUpperCase();
+    const randomStr = Math.random().toString(36).substr(2, 4).toUpperCase();
 
-  return `${initials}-${productCode}-${dateCode}-${randomStr}`;
-};
-const handleConfirmOrder = async (e) => {
-  e.preventDefault();
+    return `${initials}-${productCode}-${dateCode}-${randomStr}`;
+  };
+  const handleConfirmOrder = async (e) => {
+    e.preventDefault();
 
-  if (!validateForm()) return;
-  setIsSubmitting(true);
+    if (!validateForm()) return;
+    setIsSubmitting(true);
 
-  try {
-    const itemsPrice = (product.variantPrice || product.price) * quantity;
-    const shippingPrice = 0; // or customize
-    const taxPrice = 0;
-    const totalPrice = itemsPrice + shippingPrice + taxPrice;
+    try {
+      const itemsPrice = (product.variantPrice || product.price) * quantity;
+      const shippingPrice = 0; // or customize
+      const taxPrice = 0;
+      const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
-    // Match backend expectations
-    const orderData = {
-      customerName: formData.name,
-      customerEmail: formData.email || "no-email@guest.tn", // fallback if email empty
-      items: [
-        {
-          product: product.productId,
-          name: product.name,
-          qty: quantity,
-          price: product.variantPrice || product.price,
+      // Match backend expectations
+      const orderData = {
+        customerName: formData.name,
+        customerEmail: formData.email || "no-email@guest.tn", // fallback if email empty
+        items: [
+          {
+            product: product.productId,
+            name: product.name,
+            qty: quantity,
+            price: product.variantPrice || product.price,
+          },
+        ],
+        shippingAddress: {
+          address: formData.address,
+          city: "Tunis",
+          postalCode: "1001",
+          country: "Tunisia",
+          phone: formData.phone,
         },
-      ],
-      shippingAddress: {
-        address: formData.address,
-        city: "Tunis",
-        postalCode: "1001",
-        country: "Tunisia",
-        phone: formData.phone,
-      },
-      paymentMethod: "Cash on Delivery",
-      itemsPrice,
-      shippingPrice,
-      taxPrice,
-      totalPrice,
-    };
+        paymentMethod: "Cash on Delivery",
+        itemsPrice,
+        shippingPrice,
+        taxPrice,
+        totalPrice,
+      };
 
-    console.log("🛒 Sending order:", orderData);
+      console.log("🛒 Sending order:", orderData);
 
-    // Send to backend (use full URL if backend runs separately)
-    const res = await fetch("http://localhost:5000/api/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
-    });
+      // Send to backend (use full URL if backend runs separately)
+      const res = await fetch(`${api}/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
 
-    // Parse safely
-    const data = await res.json();
+      // Parse safely
+      const data = await res.json();
 
-    if (!res.ok) {
-      console.error("❌ Backend error:", data);
-      throw new Error(data.message || "Failed to create order");
+      if (!res.ok) {
+        console.error("❌ Backend error:", data);
+        throw new Error(data.message || "Failed to create order");
+      }
+
+      console.log("✅ Order created:", data);
+
+      // Store and redirect
+      localStorage.setItem(
+        "last-order",
+        JSON.stringify({
+          ...data,
+          orderId: generateOrderId({
+            customerName: formData.name,
+            items: [{ product: product.productId }],
+            orderDate: new Date(),
+          }),
+        })
+      );
+
+      localStorage.removeItem("buy-now-item");
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Order failed:", error);
+      alert("Order failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    console.log("✅ Order created:", data);
-
-    // Store and redirect
-    localStorage.setItem(
-      "last-order",
-      JSON.stringify({
-        ...data,
-        orderId: generateOrderId({
-          customerName: formData.name,
-          items: [{ product: product.productId }],
-          orderDate: new Date(),
-        }),
-      })
-    );
-
-    localStorage.removeItem("buy-now-item");
-    router.push("/thankyou");
-  } catch (error) {
-    console.error("Order failed:", error);
-    alert("Order failed. Please try again.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
 
 
@@ -220,7 +220,7 @@ const handleConfirmOrder = async (e) => {
           {/* Product Summary */}
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-600/30 shadow-2xl">
             <h2 className="text-2xl font-bold mb-6 pb-4 border-b border-gray-600/30">Order Summary</h2>
-            
+
             <div className="flex items-start gap-4 mb-6">
               <img
                 src={product.images?.[0] || '/placeholder.jpg'}
@@ -286,7 +286,7 @@ const handleConfirmOrder = async (e) => {
           {/* Shipping Form */}
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-600/30 shadow-2xl">
             <h2 className="text-2xl font-bold mb-6 pb-4 border-b border-gray-600/30">Shipping Information</h2>
-            
+
             <form onSubmit={handleConfirmOrder} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -298,11 +298,10 @@ const handleConfirmOrder = async (e) => {
                   value={formData.name}
                   onChange={handleInputChange}
                   data-error={!!formErrors.name}
-                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${
-                    formErrors.name 
-                      ? 'border-red-500 focus:ring-red-500/30' 
-                      : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
-                  }`}
+                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${formErrors.name
+                    ? 'border-red-500 focus:ring-red-500/30'
+                    : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
+                    }`}
                   placeholder="Enter your full name"
                 />
                 {formErrors.name && (
@@ -322,11 +321,10 @@ const handleConfirmOrder = async (e) => {
                   value={formData.email}
                   onChange={handleInputChange}
                   data-error={!!formErrors.email}
-                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${
-                    formErrors.email 
-                      ? 'border-red-500 focus:ring-red-500/30' 
-                      : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
-                  }`}
+                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${formErrors.email
+                    ? 'border-red-500 focus:ring-red-500/30'
+                    : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
+                    }`}
                   placeholder="your.email@example.com"
                 />
                 {formErrors.email && (
@@ -346,11 +344,10 @@ const handleConfirmOrder = async (e) => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   data-error={!!formErrors.phone}
-                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${
-                    formErrors.phone 
-                      ? 'border-red-500 focus:ring-red-500/30' 
-                      : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
-                  }`}
+                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${formErrors.phone
+                    ? 'border-red-500 focus:ring-red-500/30'
+                    : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
+                    }`}
                   placeholder="+216 XX XXX XXX"
                 />
                 {formErrors.phone && (
@@ -370,11 +367,10 @@ const handleConfirmOrder = async (e) => {
                   onChange={handleInputChange}
                   data-error={!!formErrors.address}
                   rows={3}
-                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all resize-none ${
-                    formErrors.address 
-                      ? 'border-red-500 focus:ring-red-500/30' 
-                      : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
-                  }`}
+                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all resize-none ${formErrors.address
+                    ? 'border-red-500 focus:ring-red-500/30'
+                    : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
+                    }`}
                   placeholder="Enter your complete shipping address including city and postal code"
                 />
                 {formErrors.address && (
@@ -398,7 +394,7 @@ const handleConfirmOrder = async (e) => {
                   `Confirm Order - ${totalPrice.toFixed(2)} TND`
                 )}
               </button>
-              
+
               <p className="text-center text-gray-400 text-sm mt-4">
                 By confirming your order, you agree to our terms of service and privacy policy.
               </p>

@@ -1,5 +1,5 @@
 // src/api/products.js
-const API_URL = "http://localhost:5000/api/products"; // change if deployed
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/products`; // change if deployed
 
 // 🟢 Get all products
 export const getAllProducts = async () => {
@@ -41,16 +41,16 @@ export const getProductsByKeyword = async (keyword) => {
 export const getFeaturedProducts = async () => {
   try {
     const res = await fetch(API_URL);
-    
+
     if (!res.ok) {
       throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
     }
-    
+
     const response = await res.json();
-    
+
     // Handle different possible response structures
     let products = [];
-    
+
     if (Array.isArray(response.products)) {
       // Your actual structure: { count: number, products: array }
       products = response.products;
@@ -61,17 +61,17 @@ export const getFeaturedProducts = async () => {
       // { data: array } structure
       products = response.data;
     }
-    
+
     console.log('Products found:', products.length);
-    
+
     // Filter featured products
-    const featured = products.filter(product => 
+    const featured = products.filter(product =>
       product.featured === true || product.featured === 'true'
     );
-    
+
     console.log('Featured products:', featured.length);
     return featured;
-    
+
   } catch (error) {
     console.error("Error fetching featured products:", error);
     return [];
