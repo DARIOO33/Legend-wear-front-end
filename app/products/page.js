@@ -1,9 +1,16 @@
 import ProductGrid from "@/components/Product/ProductGrid";
 import { getAllProducts } from "@/app/api/products";
 
+// Backend is only reachable locally right now, so this page must NOT be
+// pre-rendered at build time (Vercel's build servers cannot reach
+// http://localhost:5000). Forcing dynamic rendering makes the fetch happen
+// per-request instead, so the build no longer crashes with ECONNREFUSED.
+export const dynamic = "force-dynamic";
+
 export default async function ProductsPage() {
   const products = await getAllProducts(); // 🟢 Fetch from backend API
-  const data = products.products
+  // Guard against getAllProducts() returning [] (e.g. backend unreachable)
+  const data = Array.isArray(products) ? products : (products?.products ?? []);
   console.log(data);
   
   

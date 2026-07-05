@@ -2,6 +2,12 @@ import ProductGrid from "@/components/Product/ProductGrid";
 import { getFeaturedProducts } from "@/app/api/products";
 import Link from "next/link";
 
+// Backend is only reachable locally right now, so this page must NOT be
+// pre-rendered at build time (Vercel's build servers cannot reach
+// http://localhost:5000). Forcing dynamic rendering makes the fetch happen
+// per-request instead, so the build no longer crashes with ECONNREFUSED.
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
 
