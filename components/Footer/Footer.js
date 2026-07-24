@@ -2,52 +2,56 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-gray-800 to-gray-900 text-white py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-neutral-950 text-neutral-300">
+      <div className="container mx-auto px-4 sm:px-6 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand */}
-          <div className="col-span-1">
-            <h3 className="text-2xl font-bold mb-4">LEGEND WEAR</h3>
-            <p className="text-gray-300 leading-relaxed">
-              Premium sports jerseys for true fans. Wear the legend with authentic, high-quality merchandise.
+          <div className="col-span-1 md:col-span-2 lg:col-span-1">
+            <h3 className="text-xl font-extrabold tracking-tight text-white mb-3">
+              LEGEND WEAR
+            </h3>
+            <p className="text-neutral-400 leading-relaxed text-sm max-w-xs">
+              Maillots de football qualité premium, au meilleur prix en Tunisie.
+              Paiement à la livraison, sur toute la Tunisie.
             </p>
           </div>
 
           {/* Shop */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Shop</h4>
-            <ul className="space-y-2">
-              <li><Link href="/products" className="text-gray-300 hover:text-white transition-colors">All Products</Link></li>
-              <li><Link href="/products?category=football" className="text-gray-300 hover:text-white transition-colors">Football</Link></li>
-              <li><Link href="/products?category=basketball" className="text-gray-300 hover:text-white transition-colors">Basketball</Link></li>
-              <li><Link href="/products?category=baseball" className="text-gray-300 hover:text-white transition-colors">Baseball</Link></li>
+            <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wide">Boutique</h4>
+            <ul className="space-y-2.5 text-sm">
+              <li><Link href="/products" className="text-neutral-400 hover:text-amber-400 transition-colors">Tous les Maillots</Link></li>
+              <li><Link href="/products?category=football" className="text-neutral-400 hover:text-amber-400 transition-colors">Football</Link></li>
+              <li><Link href="/products?category=basketball" className="text-neutral-400 hover:text-amber-400 transition-colors">Basketball</Link></li>
             </ul>
           </div>
 
           {/* Support */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Support</h4>
-            <ul className="space-y-2">
-              <li><Link href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact Us</Link></li>
-              <li><Link href="/shipping" className="text-gray-300 hover:text-white transition-colors">Shipping Info</Link></li>
-              <li><Link href="/returns" className="text-gray-300 hover:text-white transition-colors">Returns</Link></li>
-              <li><Link href="/size-guide" className="text-gray-300 hover:text-white transition-colors">Size Guide</Link></li>
+            <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wide">Aide</h4>
+            <ul className="space-y-2.5 text-sm">
+              <li><Link href="/about" className="text-neutral-400 hover:text-amber-400 transition-colors">À Propos</Link></li>
+              <li><Link href="/about" className="text-neutral-400 hover:text-amber-400 transition-colors">Livraison & Paiement</Link></li>
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Contact</h4>
-            <ul className="space-y-2 text-gray-300">
-              <li>support@legendwear.com</li>
-              <li>+1 (555) 123-4567</li>
-              <li>Mon-Fri: 9AM-6PM EST</li>
+            <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wide">Contact</h4>
+            <ul className="space-y-2.5 text-sm text-neutral-400">
+              <li>contact@legendwear.tn</li>
+              <li>+216 XX XXX XXX</li>
+              <li>Livraison partout en Tunisie</li>
+              <li>Paiement à la livraison uniquement</li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 Legend Wear. All rights reserved.</p>
+        <div className="border-t border-neutral-800 mt-10 pt-8 text-center space-y-2">
+          <p className="text-xs text-neutral-500 max-w-2xl mx-auto">
+            Legend Wear propose des maillots de réplique de qualité premium. Ce ne sont pas des produits officiels sous licence.
+          </p>
+          <p className="text-xs text-neutral-500">&copy; 2026 Legend Wear. Tous droits réservés.</p>
         </div>
       </div>
     </footer>

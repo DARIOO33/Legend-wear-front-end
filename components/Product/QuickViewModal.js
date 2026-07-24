@@ -47,47 +47,49 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
     const m = product.models.find(
       item => item.name === selectedModel && item.size === selectedSize
     )
-    if (!m || m.stock <= 0) return alert('Selected model/size out of stock!')
+    if (!m || m.stock <= 0) return alert('Ce modèle/taille est en rupture de stock !')
     addToCart(product, selectedSize, selectedModel)
     onClose()
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="QUICK VIEW - LEGEND EDITION">
+    <Modal isOpen={isOpen} onClose={onClose} title="Aperçu Rapide">
       <div className="space-y-6">
         {/* Product Image */}
         <div className="relative">
-          <img 
-            src={product.images?.[0]} 
+          <img
+            src={product.images?.[0]}
             alt={product.name}
-            className="w-full h-48 object-cover rounded-xl shadow-lg border border-gray-600/30"
+            className="w-full h-48 object-cover rounded-xl border border-neutral-200 bg-neutral-50"
           />
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black px-3 py-1 rounded-full text-xs font-black tracking-wide uppercase">
-            Legend Edition
-          </div>
+          {product.featured && (
+            <div className="absolute top-3 right-3 bg-amber-500 text-neutral-950 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase">
+              En Vedette
+            </div>
+          )}
         </div>
 
         {/* Product Info */}
         <div className="text-center">
-          <h3 className="text-2xl font-black text-white mb-2 tracking-tight">{product.name}</h3>
-          <p className="text-gray-300 mb-3 font-medium text-lg">{product.team}</p>
-          <p className="text-3xl font-black bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            {getPrice()} TND
+          <h3 className="text-xl font-extrabold text-neutral-900 mb-1 tracking-tight">{product.name}</h3>
+          <p className="text-neutral-500 mb-2 font-medium">{product.team}</p>
+          <p className="text-2xl font-extrabold text-neutral-900">
+            {getPrice()} <span className="text-base font-semibold text-neutral-500">TND</span>
           </p>
         </div>
 
         {/* Model Selection */}
         <div>
-          <h4 className="font-bold text-gray-200 mb-3 text-lg">SELECT MODEL</h4>
-          <div className="flex flex-wrap gap-3">
+          <h4 className="font-semibold text-neutral-700 mb-2.5 text-sm uppercase tracking-wide">Modèle</h4>
+          <div className="flex flex-wrap gap-2.5">
             {[...new Set(product.models.map(m => m.name))].map(model => (
               <button
                 key={model}
                 onClick={() => setSelectedModel(model)}
-                className={`px-5 py-3 border-2 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 ${
+                className={`px-4 py-2.5 border rounded-xl font-semibold text-sm transition-all ${
                   selectedModel === model
-                    ? 'border-white bg-gradient-to-r from-gray-700 to-gray-800 text-white shadow-lg scale-105'
-                    : 'border-gray-600 text-gray-300 hover:border-gray-500 hover:bg-gray-700/50 backdrop-blur-sm'
+                    ? 'border-neutral-900 bg-neutral-900 text-white'
+                    : 'border-neutral-200 text-neutral-700 hover:border-neutral-400'
                 }`}
               >
                 {model}
@@ -98,16 +100,16 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
 
         {/* Size Selection */}
         <div>
-          <h4 className="font-bold text-gray-200 mb-3 text-lg">SELECT SIZE</h4>
-          <div className="flex flex-wrap gap-3">
+          <h4 className="font-semibold text-neutral-700 mb-2.5 text-sm uppercase tracking-wide">Taille</h4>
+          <div className="flex flex-wrap gap-2.5">
             {availableSizes.map(size => (
               <button
                 key={size}
                 onClick={() => setSelectedSize(size)}
-                className={`px-5 py-3 border-2 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 ${
+                className={`px-4 py-2.5 border rounded-xl font-semibold text-sm transition-all ${
                   selectedSize === size
-                    ? 'border-white bg-gradient-to-r from-gray-700 to-gray-800 text-white shadow-lg scale-105'
-                    : 'border-gray-600 text-gray-300 hover:border-gray-500 hover:bg-gray-700/50 backdrop-blur-sm'
+                    ? 'border-neutral-900 bg-neutral-900 text-white'
+                    : 'border-neutral-200 text-neutral-700 hover:border-neutral-400'
                 }`}
               >
                 {size}
@@ -117,20 +119,20 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
         </div>
 
         {/* Actions */}
-        <div className="flex space-x-4">
-          <Button 
-            variant="primary" 
-            className="flex-1 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform border border-gray-600"
+        <div className="flex gap-3">
+          <Button
+            variant="accent"
+            className="flex-1"
             onClick={handleAddToCart}
           >
-            🛒 Add to Cart
+            Ajouter au Panier
           </Button>
-          <Button 
-            variant="outline" 
-            className="flex-1 border-2 border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:bg-gray-700/50 backdrop-blur-sm hover:scale-105 transform"
+          <Button
+            variant="outline"
+            className="flex-1"
             onClick={onClose}
           >
-            🔍 View Details
+            Voir les Détails
           </Button>
         </div>
       </div>

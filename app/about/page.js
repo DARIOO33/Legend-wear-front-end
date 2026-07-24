@@ -1,221 +1,145 @@
-'use client'
-
-import { useState } from 'react'
-
 export default function AboutPage() {
-  const [activeTab, setActiveTab] = useState('story')
-
   const features = [
     {
-      icon: '⚽',
-      title: 'Sports Passion',
-      description: 'Authentic football & basketball designs that celebrate your favorite sports'
+      title: 'Passion du Sport',
+      description: 'Des designs de football qui célèbrent ton club et tes légendes préférées'
     },
     {
-      icon: '💰',
-      title: 'Best Prices',
-      description: 'Premium quality t-shirts at affordable prices for every fan'
+      title: 'Meilleur Prix',
+      description: 'Des maillots qualité premium au meilleur prix en Tunisie'
     },
     {
-      icon: '🚚',
-      title: 'Fast Shipping',
-      description: '24-48 hour delivery across Tunisia. Your legends arrive quickly'
+      title: 'Livraison Rapide',
+      description: 'Livraison en 24-48h partout en Tunisie'
     },
     {
-      icon: '💵',
-      title: 'Cash on Delivery',
-      description: 'Pay when you receive your order. No upfront payments required'
+      title: 'Paiement à la Livraison',
+      description: 'Tu payes en espèces à la réception. Aucun paiement en ligne requis'
     }
   ]
 
-  const team = [
+  const missionCards = [
     {
-      name: 'Mohamed Ali',
-      role: 'Founder & Sports Enthusiast',
-      bio: 'Passionate about bringing legendary sports apparel to Tunisian fans'
+      title: 'Qualité Premium',
+      description: 'Chaque maillot est sélectionné pour son confort, sa durabilité et sa fidélité au design original.'
     },
     {
-      name: 'Sarah Ben',
-      role: 'Head of Design',
-      bio: 'Creating iconic designs that capture the spirit of the game'
+      title: 'Meilleur Prix',
+      description: 'Nous proposons les prix les plus compétitifs de Tunisie, sans compromis sur la qualité.'
     },
     {
-      name: 'Karim Trabelsi',
-      role: 'Operations Manager',
-      bio: 'Ensuring your legends reach you within 48 hours, guaranteed'
+      title: 'Confiance & Transparence',
+      description: 'Le paiement à la livraison veut dire que tu ne payes qu\'une fois satisfait. Aucun risque, aucune complication.'
+    },
+    {
+      title: '100% Tunisie',
+      description: 'Nous livrons uniquement en Tunisie, et notre équipe te contacte par téléphone pour confirmer chaque commande.'
     }
   ]
 
   return (
-    <section className="relative py-16 text-white min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/20 to-black/40"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight">
-            ABOUT <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">LEGEND WEAR</span>
+    <section className="bg-white min-h-screen">
+      {/* Hero */}
+      <div className="bg-neutral-950 text-white py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+            À Propos de <span className="text-amber-500">Legend Wear</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Tunisia's Premier Destination for Authentic Football & Basketball Apparel
+          <p className="text-base md:text-lg text-neutral-300 max-w-2xl mx-auto">
+            Le meilleur prix en Tunisie pour des maillots de football qualité premium
           </p>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 sm:px-6 py-16">
         {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-16 mb-16">
-          {/* <div className="text-center p-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-600/30">
-            <div className="text-3xl font-black text-white mb-2">1000+</div>
-            <div className="text-gray-400">Legends Served</div>
-          </div> */}
-          <div className="text-center p-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-600/30">
-            <div className="text-3xl font-black text-white mb-2">24-48h</div>
-            <div className="text-gray-400">Delivery Time</div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16 max-w-3xl mx-auto">
+          <div className="text-center p-6 bg-neutral-50 rounded-2xl border border-neutral-200">
+            <div className="text-2xl md:text-3xl font-extrabold text-neutral-900 mb-1">24-48h</div>
+            <div className="text-neutral-500 text-sm">Délai de Livraison</div>
           </div>
-          <div className="text-center p-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-600/30">
-            <div className="text-3xl font-black text-white mb-2">100%</div>
-            <div className="text-gray-400">COD Available</div>
+          <div className="text-center p-6 bg-neutral-50 rounded-2xl border border-neutral-200">
+            <div className="text-2xl md:text-3xl font-extrabold text-neutral-900 mb-1">100%</div>
+            <div className="text-neutral-500 text-sm">Paiement à la Livraison</div>
           </div>
-          <div className="text-center p-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-600/30">
-            <div className="text-3xl font-black text-white mb-2">⭐️⭐️⭐️⭐️⭐️</div>
-            <div className="text-gray-400">Customer Rating</div>
+          <div className="text-center p-6 bg-neutral-50 rounded-2xl border border-neutral-200 col-span-2 md:col-span-1">
+            <div className="text-2xl md:text-3xl font-extrabold text-neutral-900 mb-1">🇹🇳</div>
+            <div className="text-neutral-500 text-sm">Livraison en Tunisie Uniquement</div>
           </div>
         </div>
 
-        {/* Tabs Section */}
-        <div className="mb-16">
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {[ 'mission', 'team'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                  activeTab === tab
-                    ? 'bg-white text-black shadow-2xl scale-105'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white border border-gray-600'
-                }`}
-              >
-                {tab === 'mission' && 'Our Mission'}
-                {tab === 'team' && 'Our Team'}
-              </button>
-            ))}
+        {/* Mission Section */}
+        <div className="mb-20">
+          <div className="text-center mb-10">
+            <span className="text-amber-600 font-bold text-sm uppercase tracking-wider">Notre Mission</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-neutral-900 tracking-tight mt-1">
+              Pourquoi Legend Wear
+            </h2>
           </div>
 
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 md:p-12 border border-gray-600/30 shadow-2xl">
-          
+          <div className="bg-neutral-50 rounded-2xl p-8 md:p-12 border border-neutral-200">
+            <p className="text-lg text-neutral-600 leading-relaxed mb-8 max-w-3xl">
+              Chez Legend Wear, notre mission est simple : offrir à chaque fan tunisien de football des
+              maillots de qualité premium au meilleur prix, avec un paiement simple et sans risque à la livraison.
+            </p>
 
-            {activeTab === 'mission' && (
-              <div className="space-y-6">
-                <h2 className="text-4xl font-black mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                  Our Mission & Values
-                </h2>
-                <p className="text-lg text-gray-300 leading-relaxed">
-                  At Legend Wear, our mission is simple: to provide every Tunisian sports fan with access to 
-                  high-quality, affordable football and basketball apparel that lets them represent their passion 
-                  with pride and style.
-                </p>
-                
-                <div className="grid md:grid-cols-2 gap-6 mt-8">
-                  <div className="p-6 bg-gray-700/30 rounded-xl border border-gray-600/50">
-                    <h3 className="font-bold text-white mb-3 text-xl">🎯 Quality First</h3>
-                    <p className="text-gray-300">
-                      We never compromise on quality. Every t-shirt is crafted with premium materials to ensure 
-                      comfort, durability, and that legendary feel.
-                    </p>
-                  </div>
-                  <div className="p-6 bg-gray-700/30 rounded-xl border border-gray-600/50">
-                    <h3 className="font-bold text-white mb-3 text-xl">⚡ Speed & Reliability</h3>
-                    <p className="text-gray-300">
-                      Your time is valuable. Our 24-48 hour shipping promise means you get your legends when you need them.
-                    </p>
-                  </div>
-                  <div className="p-6 bg-gray-700/30 rounded-xl border border-gray-600/50">
-                    <h3 className="font-bold text-white mb-3 text-xl">🤝 Trust & Transparency</h3>
-                    <p className="text-gray-300">
-                      Cash on delivery means you only pay when you're satisfied. No risks, no complications.
-                    </p>
-                  </div>
-                  <div className="p-6 bg-gray-700/30 rounded-xl border border-gray-600/50">
-                    <h3 className="font-bold text-white mb-3 text-xl">❤️ Community Driven</h3>
-                    <p className="text-gray-300">
-                      We're more than a store - we're part of Tunisia's sports community, celebrating the passion that unites us all.
-                    </p>
-                  </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              {missionCards.map((card) => (
+                <div key={card.title} className="p-6 bg-white rounded-xl border border-neutral-200">
+                  <h3 className="font-bold text-neutral-900 mb-2 text-lg">{card.title}</h3>
+                  <p className="text-neutral-600">{card.description}</p>
                 </div>
-              </div>
-            )}
-
-            {activeTab === 'team' && (
-              <div className="space-y-8">
-                <h2 className="text-4xl font-black mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                  Meet The Legends
-                </h2>
-                <p className="text-lg text-gray-300 leading-relaxed">
-                  Our team is comprised of passionate sports enthusiasts and professionals dedicated to bringing 
-                  you the best shopping experience in Tunisia.
-                </p>
-                
-                <div className="grid md:grid-cols-3 gap-6">
-                  {team.map((member, index) => (
-                    <div key={index} className="text-center p-6 bg-gray-700/30 rounded-xl border border-gray-600/50 hover:bg-gray-700/50 transition-all duration-300">
-                      <div className="w-20 h-20 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                        {member.name.split(' ').map(n => n[0]).join('')}
-                      </div>
-                      <h3 className="font-bold text-white text-xl mb-2">{member.name}</h3>
-                      <p className="text-gray-400 mb-3">{member.role}</p>
-                      <p className="text-gray-300 text-sm">{member.bio}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Features Grid */}
-        <div className="mb-16">
-          <h2 className="text-4xl font-black text-center mb-12 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Why Choose Legend Wear?
+        <div className="mb-20">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center text-neutral-900 tracking-tight mb-12">
+            Pourquoi Choisir Legend Wear ?
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <div key={index} className="text-center p-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-600/30 hover:border-gray-500 transition-all duration-300 hover:scale-105 transform">
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="font-bold text-white text-xl mb-3">{feature.title}</h3>
-                <p className="text-gray-300">{feature.description}</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature) => (
+              <div key={feature.title} className="text-center p-6 bg-white rounded-2xl border border-neutral-200 hover:border-amber-400 hover:shadow-md transition-all duration-300">
+                <h3 className="font-bold text-neutral-900 text-lg mb-2">{feature.title}</h3>
+                <p className="text-neutral-500 text-sm">{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* CTA Section */}
-        <div className="text-center bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-12 border border-gray-600/30">
-          <h2 className="text-4xl font-black mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Ready to Wear Your Legend?
+        <div className="text-center bg-neutral-950 text-white rounded-2xl p-12">
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">
+            Prêt à Porter ta Légende ?
           </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied customers across Tunisia who trust Legend Wear for their sports apparel needs.
+          <p className="text-neutral-300 mb-8 max-w-2xl mx-auto">
+            Rejoins les clients partout en Tunisie qui font confiance à Legend Wear pour leurs maillots de football.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={() => window.location.href = '/products'}
-              className="cursor-pointer bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 transform border border-gray-600"
-            >
-              Explore Our Products
-            </button>
-           
-          </div>
+          <a
+            href="/products"
+            className="inline-block bg-amber-500 hover:bg-amber-400 text-neutral-950 px-8 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg shadow-amber-500/10"
+          >
+            Découvrir nos Maillots
+          </a>
         </div>
 
         {/* Shipping Info */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-4 bg-gray-800/50 px-6 py-4 rounded-xl border border-gray-600/30">
-            <span className="text-2xl">🚚</span>
+        <div className="mt-14 text-center">
+          <div className="inline-flex items-center gap-4 bg-neutral-50 px-6 py-4 rounded-xl border border-neutral-200">
             <div className="text-left">
-              <div className="font-semibold text-white">24-48 Hour Shipping</div>
-              <div className="text-gray-400 text-sm">Available across Tunisia</div>
+              <div className="font-semibold text-neutral-900">Livraison en 24-48h</div>
+              <div className="text-neutral-500 text-sm">Disponible partout en Tunisie uniquement</div>
             </div>
           </div>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="mt-8 text-center">
+          <p className="text-xs text-neutral-400 max-w-2xl mx-auto">
+            Legend Wear propose des maillots de réplique de qualité premium. Nos produits ne sont pas des articles officiels sous licence et ne sont affiliés à aucun club, ligue ou fédération.
+          </p>
         </div>
       </div>
     </section>

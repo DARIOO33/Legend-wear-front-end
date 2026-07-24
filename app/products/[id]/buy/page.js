@@ -17,9 +17,17 @@ export default function BuyPage() {
     name: '',
     email: '',
     phone: '',
-    address: ''
+    address: '',
+    governorate: ''
   })
   const [formErrors, setFormErrors] = useState({})
+
+  const TUNISIA_GOVERNORATES = [
+    'Ariana', 'Béja', 'Ben Arous', 'Bizerte', 'Gabès', 'Gafsa', 'Jendouba',
+    'Kairouan', 'Kasserine', 'Kébili', 'Le Kef', 'Mahdia', 'La Manouba',
+    'Médenine', 'Monastir', 'Nabeul', 'Sfax', 'Sidi Bouzid', 'Siliana',
+    'Sousse', 'Tataouine', 'Tozeur', 'Tunis', 'Zaghouan'
+  ]
 
   // Load product from localStorage
   useEffect(() => {
@@ -39,7 +47,6 @@ export default function BuyPage() {
       ...prev,
       [name]: value
     }))
-    // Clear error when user starts typing
     if (formErrors[name]) {
       setFormErrors(prev => ({
         ...prev,
@@ -52,23 +59,30 @@ export default function BuyPage() {
     const errors = {}
 
     if (!formData.name.trim()) {
-      errors.name = 'Full name is required'
+      errors.name = 'Le nom complet est requis'
     }
 
     if (!formData.phone.trim()) {
-      errors.phone = 'Phone number is required'
-    } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(formData.phone)) {
-      errors.phone = 'Please enter a valid phone number'
+      errors.phone = 'Le numéro de téléphone est requis'
+    } else {
+      const cleaned = formData.phone.replace(/[\s\-\(\)]/g, '').replace(/^(\+216|00216)/, '')
+      if (!/^[2459]\d{7}$/.test(cleaned)) {
+        errors.phone = 'Veuillez entrer un numéro de téléphone tunisien valide (8 chiffres)'
+      }
+    }
+
+    if (!formData.governorate) {
+      errors.governorate = 'Veuillez sélectionner votre gouvernorat'
     }
 
     if (!formData.address.trim()) {
-      errors.address = 'Shipping address is required'
+      errors.address = "L'adresse de livraison est requise"
     } else if (formData.address.trim().length < 10) {
-      errors.address = 'Please provide a complete address'
+      errors.address = 'Veuillez fournir une adresse complète'
     }
 
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = 'Please enter a valid email address'
+      errors.email = 'Veuillez entrer une adresse e-mail valide'
     }
 
     setFormErrors(errors)
@@ -103,10 +117,9 @@ export default function BuyPage() {
       const taxPrice = 0;
       const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
-      // Match backend expectations
       const orderData = {
         customerName: formData.name,
-        customerEmail: formData.email || "no-email@guest.tn", // fallback if email empty
+        customerEmail: formData.email || "no-email@guest.tn",
         items: [
           {
             product: product.productId,
@@ -117,9 +130,9 @@ export default function BuyPage() {
         ],
         shippingAddress: {
           address: formData.address,
-          city: "Tunis",
-          postalCode: "1001",
-          country: "Tunisia",
+          city: formData.governorate,
+          postalCode: "",
+          country: "Tunisie",
           phone: formData.phone,
         },
         paymentMethod: "Cash on Delivery",
@@ -131,14 +144,12 @@ export default function BuyPage() {
 
       console.log("🛒 Sending order:", orderData);
 
-      // Send to backend (use full URL if backend runs separately)
       const res = await fetch(`${api}/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
 
-      // Parse safely
       const data = await res.json();
 
       if (!res.ok) {
@@ -148,7 +159,6 @@ export default function BuyPage() {
 
       console.log("✅ Order created:", data);
 
-      // Store and redirect
       localStorage.setItem(
         "last-order",
         JSON.stringify({
@@ -165,21 +175,18 @@ export default function BuyPage() {
       router.push("/thankyou");
     } catch (error) {
       console.error("Order failed:", error);
-      alert("Order failed. Please try again.");
+      alert("Échec de la commande. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-
-
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-xl">Loading your legendary product...</p>
+          <div className="w-12 h-12 border-2 border-neutral-200 border-t-amber-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-neutral-500">Chargement de votre commande...</p>
         </div>
       </div>
     )
@@ -187,15 +194,15 @@ export default function BuyPage() {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white px-4 text-center">
-        <div className="bg-red-500/20 border border-red-500/50 rounded-2xl p-8 max-w-md">
-          <h1 className="text-3xl font-black mb-4 text-red-400">Oops!</h1>
-          <p className="text-xl mb-6 text-gray-300">{error || 'Product not found'}</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 text-center">
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md">
+          <h1 className="text-2xl font-extrabold mb-3 text-red-600">Oups !</h1>
+          <p className="text-neutral-600 mb-6">{error || 'Produit introuvable'}</p>
           <button
             onClick={() => router.push('/')}
-            className="bg-white text-black px-8 py-3 rounded-xl font-bold hover:bg-gray-200 transition transform hover:scale-105"
+            className="bg-neutral-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-neutral-800 transition-colors"
           >
-            Continue Shopping
+            Continuer mes Achats
           </button>
         </div>
       </div>
@@ -206,76 +213,76 @@ export default function BuyPage() {
   const totalPrice = (product.variantPrice || product.price || 0) * quantity
 
   return (
-    <div className="min-h-screen py-8 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4">
+    <div className="min-h-screen py-8 md:py-12 bg-white px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Complete Your Purchase
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-3 text-neutral-900 tracking-tight">
+            Finalisez Votre Commande
           </h1>
-          <p className="text-gray-400 text-lg">Final step to own this legendary piece</p>
+          <p className="text-neutral-500">Dernière étape avant de recevoir votre maillot</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Product Summary */}
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-600/30 shadow-2xl">
-            <h2 className="text-2xl font-bold mb-6 pb-4 border-b border-gray-600/30">Order Summary</h2>
+          <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200 h-fit">
+            <h2 className="text-xl font-bold mb-6 pb-4 border-b border-neutral-200 text-neutral-900">Récapitulatif de la Commande</h2>
 
             <div className="flex items-start gap-4 mb-6">
               <img
                 src={product.images?.[0] || '/placeholder.jpg'}
                 alt={product.name}
-                className="w-20 h-20 object-cover rounded-xl border border-gray-600/30 flex-shrink-0"
+                className="w-20 h-20 object-cover rounded-xl border border-neutral-200 flex-shrink-0 bg-white"
               />
               <div className="flex-1">
-                <h3 className="font-bold text-lg mb-1">{product.name}</h3>
-                <p className="text-gray-400 text-sm mb-1">Model: {product.selectedModel}</p>
-                <p className="text-gray-400 text-sm mb-2">Size: {product.selectedSize}</p>
-                <p className="text-white font-semibold">
+                <h3 className="font-bold text-lg mb-1 text-neutral-900">{product.name}</h3>
+                <p className="text-neutral-500 text-sm mb-1">Modèle : {product.selectedModel}</p>
+                <p className="text-neutral-500 text-sm mb-2">Taille : {product.selectedSize}</p>
+                <p className="text-neutral-900 font-semibold">
                   {(product.variantPrice || product.price).toFixed(2)} TND
                 </p>
               </div>
             </div>
 
             {/* Quantity Selector */}
-            <div className="bg-gray-700/50 rounded-xl p-4 mb-4">
-              <label className="block text-sm font-medium text-gray-300 mb-3">Quantity</label>
+            <div className="bg-white rounded-xl p-4 mb-4 border border-neutral-200">
+              <label className="block text-sm font-medium text-neutral-600 mb-3">Quantité</label>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
-                    className="w-10 h-10 rounded-lg border-2 border-gray-600 flex items-center justify-center text-xl hover:bg-gray-600/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="w-10 h-10 rounded-lg border border-neutral-300 flex items-center justify-center text-lg hover:bg-neutral-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
                     -
                   </button>
-                  <span className="text-xl font-bold w-8 text-center">{quantity}</span>
+                  <span className="text-lg font-bold w-8 text-center text-neutral-900">{quantity}</span>
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.min(maxQuantity, quantity + 1))}
                     disabled={quantity >= maxQuantity}
-                    className="w-10 h-10 rounded-lg border-2 border-gray-600 flex items-center justify-center text-xl hover:bg-gray-600/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="w-10 h-10 rounded-lg border border-neutral-300 flex items-center justify-center text-lg hover:bg-neutral-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
                     +
                   </button>
                 </div>
-                <span className="text-sm text-gray-400">Max: {maxQuantity}</span>
+                <span className="text-sm text-neutral-500">Max : {maxQuantity}</span>
               </div>
             </div>
 
             {/* Price Summary */}
-            <div className="bg-gray-700/30 rounded-xl p-4">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-400">Subtotal</span>
+            <div className="bg-white rounded-xl p-4 border border-neutral-200">
+              <div className="flex justify-between items-center mb-2 text-neutral-600">
+                <span>Sous-total</span>
                 <span>{(product.variantPrice || product.price).toFixed(2)} TND</span>
               </div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-400">Quantity</span>
+              <div className="flex justify-between items-center mb-2 text-neutral-600">
+                <span>Quantité</span>
                 <span>× {quantity}</span>
               </div>
-              <div className="border-t border-gray-600/50 pt-2 mt-2">
-                <div className="flex justify-between items-center text-lg font-bold">
+              <div className="border-t border-neutral-200 pt-2 mt-2">
+                <div className="flex justify-between items-center text-lg font-bold text-neutral-900">
                   <span>Total</span>
                   <span className="text-xl">{totalPrice.toFixed(2)} TND</span>
                 </div>
@@ -284,119 +291,145 @@ export default function BuyPage() {
           </div>
 
           {/* Shipping Form */}
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-600/30 shadow-2xl">
-            <h2 className="text-2xl font-bold mb-6 pb-4 border-b border-gray-600/30">Shipping Information</h2>
+          <div className="bg-white rounded-2xl p-6 border border-neutral-200 shadow-sm">
+            <h2 className="text-xl font-bold mb-6 pb-4 border-b border-neutral-100 text-neutral-900">Informations de Livraison</h2>
 
             <form onSubmit={handleConfirmOrder} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Full Name *
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Nom Complet *
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  data-error={!!formErrors.name}
-                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${formErrors.name
-                    ? 'border-red-500 focus:ring-red-500/30'
-                    : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
+                  className={`w-full px-4 py-3 rounded-xl border bg-white text-neutral-900 focus:outline-none focus:ring-2 transition-all ${formErrors.name
+                    ? 'border-red-400 focus:ring-red-500/20'
+                    : 'border-neutral-200 focus:ring-amber-500/20 focus:border-amber-400'
                     }`}
-                  placeholder="Enter your full name"
+                  placeholder="Entrez votre nom complet"
                 />
                 {formErrors.name && (
-                  <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
-                    <span>⚠</span> {formErrors.name}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Email Address
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Adresse E-mail (optionnel)
                 </label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  data-error={!!formErrors.email}
-                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${formErrors.email
-                    ? 'border-red-500 focus:ring-red-500/30'
-                    : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
+                  className={`w-full px-4 py-3 rounded-xl border bg-white text-neutral-900 focus:outline-none focus:ring-2 transition-all ${formErrors.email
+                    ? 'border-red-400 focus:ring-red-500/20'
+                    : 'border-neutral-200 focus:ring-amber-500/20 focus:border-amber-400'
                     }`}
-                  placeholder="your.email@example.com"
+                  placeholder="votre.email@exemple.com"
                 />
                 {formErrors.email && (
-                  <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
-                    <span>⚠</span> {formErrors.email}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Phone Number *
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Numéro de Téléphone *
                 </label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  data-error={!!formErrors.phone}
-                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all ${formErrors.phone
-                    ? 'border-red-500 focus:ring-red-500/30'
-                    : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
+                  className={`w-full px-4 py-3 rounded-xl border bg-white text-neutral-900 focus:outline-none focus:ring-2 transition-all ${formErrors.phone
+                    ? 'border-red-400 focus:ring-red-500/20'
+                    : 'border-neutral-200 focus:ring-amber-500/20 focus:border-amber-400'
                     }`}
                   placeholder="+216 XX XXX XXX"
                 />
                 {formErrors.phone && (
-                  <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
-                    <span>⚠</span> {formErrors.phone}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Shipping Address *
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Gouvernorat *
+                </label>
+                <select
+                  name="governorate"
+                  value={formData.governorate}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 rounded-xl border bg-white text-neutral-900 focus:outline-none focus:ring-2 transition-all ${formErrors.governorate
+                    ? 'border-red-400 focus:ring-red-500/20'
+                    : 'border-neutral-200 focus:ring-amber-500/20 focus:border-amber-400'
+                    }`}
+                >
+                  <option value="">Sélectionnez votre gouvernorat</option>
+                  {TUNISIA_GOVERNORATES.map((gov) => (
+                    <option key={gov} value={gov}>{gov}</option>
+                  ))}
+                </select>
+                {formErrors.governorate && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.governorate}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Adresse de Livraison *
                 </label>
                 <textarea
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  data-error={!!formErrors.address}
                   rows={3}
-                  className={`w-full px-4 py-3 rounded-xl border bg-gray-700 text-white focus:outline-none focus:ring-2 transition-all resize-none ${formErrors.address
-                    ? 'border-red-500 focus:ring-red-500/30'
-                    : 'border-gray-600/50 focus:ring-white/30 focus:border-white/50'
+                  className={`w-full px-4 py-3 rounded-xl border bg-white text-neutral-900 focus:outline-none focus:ring-2 transition-all resize-none ${formErrors.address
+                    ? 'border-red-400 focus:ring-red-500/20'
+                    : 'border-neutral-200 focus:ring-amber-500/20 focus:border-amber-400'
                     }`}
-                  placeholder="Enter your complete shipping address including city and postal code"
+                  placeholder="Rue, numéro, ville, code postal..."
                 />
                 {formErrors.address && (
-                  <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
-                    <span>⚠</span> {formErrors.address}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{formErrors.address}</p>
                 )}
+              </div>
+
+              {/* Payment Method */}
+              <div className="p-4 bg-amber-50 rounded-xl border border-amber-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-neutral-900">Paiement à la Livraison</h3>
+                    <p className="text-sm text-neutral-600">Vous payez en espèces à la réception, partout en Tunisie</p>
+                  </div>
+                </div>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 rounded-xl text-lg font-bold bg-gradient-to-r from-white to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-xl text-lg font-bold bg-amber-500 hover:bg-amber-600 text-neutral-950 shadow-lg shadow-amber-500/20 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>
-                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-                    Processing Order...
+                    <div className="w-5 h-5 border-2 border-neutral-950 border-t-transparent rounded-full animate-spin"></div>
+                    Traitement de la Commande...
                   </>
                 ) : (
-                  `Confirm Order - ${totalPrice.toFixed(2)} TND`
+                  `Confirmer la Commande - ${totalPrice.toFixed(2)} TND`
                 )}
               </button>
 
-              <p className="text-center text-gray-400 text-sm mt-4">
-                By confirming your order, you agree to our terms of service and privacy policy.
+              <p className="text-center text-neutral-400 text-xs mt-4">
+                En confirmant votre commande, vous acceptez nos conditions d'utilisation. Livraison disponible uniquement en Tunisie.
               </p>
             </form>
           </div>

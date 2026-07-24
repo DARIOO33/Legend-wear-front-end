@@ -19,14 +19,14 @@ export class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="min-h-screen flex items-center justify-center bg-white px-4">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Something went wrong</h2>
-            <button 
+            <h2 className="text-2xl font-extrabold text-neutral-900 mb-4">Une erreur est survenue</h2>
+            <button
               onClick={() => this.setState({ hasError: false })}
-              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors"
+              className="bg-amber-500 hover:bg-amber-600 text-neutral-950 px-6 py-3 rounded-xl font-bold transition-colors"
             >
-              Try Again
+              Réessayer
             </button>
           </div>
         </div>

@@ -8,30 +8,30 @@ import Header from '@/components/Header/Header'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Legend Wear - Premium Sports Jerseys',
-  description: 'Premium football, basketball and sports jerseys for true fans',
+  title: 'Legend Wear - Maillots de Football au Meilleur Prix en Tunisie',
+  description: 'Maillots de football qualité premium (réplique) au meilleur prix en Tunisie. Paiement à la livraison, partout en Tunisie.',
 }
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="fr">
+      <body className={`${inter.className} bg-white text-neutral-900`}>
         <CartProvider>
-          
+
           <div className="flex flex-col min-h-screen">
             <ToastContainer
             position="bottom-right"
-            autoClose={5000}
+            autoClose={4000}
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick
             rtl={false}
             draggable
-            theme="colored"
+            theme="light"
             transition={Bounce}
           />
             <Header />
-            <main className="flex-1 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+            <main className="flex-1 bg-white">
               {children}
             </main>
             <Footer />

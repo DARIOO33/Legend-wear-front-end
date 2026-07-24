@@ -5,168 +5,127 @@ export default function CollectionsPage() {
     {
       id: 1,
       name: "CLUB COLLECTION",
-      description: "Official club jerseys without player names – perfect for true fans",
-      image: "/collections/clubs.jpg",
-      count: "30 Products",
-      gradient: "from-blue-900/80 to-blue-700/80",
-      hoverGradient: "from-blue-800 to-blue-600",
+      description: "Maillots de clubs sans noms de joueurs – parfait pour les vrais fans",
+      count: "30 Produits",
       sport: "FOOTBALL"
     },
     {
       id: 2,
       name: "NATIONAL TEAMS",
-      description: "Iconic country jerseys for international tournaments and fans",
-      image: "/collections/national.jpg",
-      count: "22 Products",
-      gradient: "from-green-900/80 to-green-700/80",
-      hoverGradient: "from-green-800 to-green-600",
+      description: "Maillots de sélections nationales pour les tournois internationaux",
+      count: "22 Produits",
       sport: "FOOTBALL"
     },
     {
       id: 3,
       name: "RETRO CLASSICS",
-      description: "Vintage football shirts inspired by past eras – no player names",
-      image: "/collections/retro.jpg",
-      count: "18 Products",
-      gradient: "from-yellow-900/80 to-yellow-700/80",
-      hoverGradient: "from-yellow-800 to-yellow-600",
+      description: "Maillots vintage inspirés des époques passées",
+      count: "18 Produits",
       sport: "FOOTBALL"
     },
     {
       id: 4,
       name: "CHAMPIONS EDITION",
-      description: "Special edition kits from top tournaments and cup finals",
-      image: "/collections/champions.jpg",
-      count: "15 Products",
-      gradient: "from-red-900/80 to-red-700/80",
-      hoverGradient: "from-red-800 to-red-600",
+      description: "Éditions spéciales des plus grands tournois et finales",
+      count: "15 Produits",
       sport: "FOOTBALL"
     },
     {
       id: 5,
       name: "TRAINING & LIFESTYLE",
-      description: "Training jerseys and casual football wear for everyday style",
-      image: "/collections/training.jpg",
-      count: "20 Products",
-      gradient: "from-purple-900/80 to-purple-700/80",
-      hoverGradient: "from-purple-800 to-purple-600",
+      description: "Maillots d'entraînement et tenues casual pour tous les jours",
+      count: "20 Produits",
       sport: "FOOTBALL"
     },
     {
       id: 6,
       name: "FAN FAVORITES",
-      description: "Most popular football kits loved by fans worldwide",
-      image: "/collections/fans.jpg",
-      count: "25 Products",
-      gradient: "from-indigo-900/80 to-indigo-700/80",
-      hoverGradient: "from-indigo-800 to-indigo-600",
+      description: "Les maillots les plus populaires auprès des fans",
+      count: "25 Produits",
       sport: "FOOTBALL"
     }
   ]
 
   return (
-    <section className="relative py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white min-h-screen overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/20 to-black/40"></div>
-      
-      {/* Subtle texture overlay */}
-      <div className="absolute inset-0 bg-noise opacity-10"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight">
-            LEGENDARY <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">COLLECTIONS</span>
+    <section className="bg-white min-h-screen">
+      <div className="bg-neutral-950 text-white py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+            Nos <span className="text-amber-500">Collections</span>
           </h1>
-          <p className="text-xl md:text-2xl lg:text-3xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            Explore Our Curated <span className="font-semibold text-gray-200">Legend Series</span> - Where Greatness Meets Style
+          <p className="text-base md:text-lg text-neutral-300 max-w-2xl mx-auto">
+            Explore notre sélection Legend Series — là où la grandeur rencontre le style
           </p>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 sm:px-6 py-16">
         {/* Collections Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {collections.map((collection) => (
-            <Link 
+            <Link
               key={collection.id}
               href={`/collections/${collection.id}`}
-              className="group relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-700 transform hover:scale-105"
+              className="group relative overflow-hidden rounded-2xl border border-neutral-200 hover:border-amber-400 hover:shadow-xl transition-all duration-300 bg-neutral-50"
             >
-              {/* Background Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${collection.gradient} group-hover:${collection.hoverGradient} transition-all duration-500`}></div>
-              
-              {/* Background Pattern */}
-              <div className="absolute inset-0 bg-noise opacity-20"></div>
-              
-              {/* Content */}
-              <div className="relative z-10 p-8 h-80 flex flex-col justify-between">
-                {/* Sport Badge */}
+              <div className="p-8 h-72 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
-                  <span className="bg-black/30 text-white px-4 py-2 rounded-xl text-sm font-bold tracking-wide border border-white/20 backdrop-blur-sm">
+                  <span className="bg-neutral-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide">
                     {collection.sport}
                   </span>
-                  <span className="bg-white/20 text-white px-3 py-1 rounded-lg text-xs font-semibold backdrop-blur-sm">
+                  <span className="bg-white text-neutral-600 px-3 py-1 rounded-lg text-xs font-semibold border border-neutral-200">
                     {collection.count}
                   </span>
                 </div>
 
-                {/* Collection Info */}
                 <div className="text-center">
-                  <h3 className="text-2xl md:text-3xl font-black mb-4 tracking-tight">
+                  <h3 className="text-xl md:text-2xl font-extrabold mb-3 tracking-tight text-neutral-900 group-hover:text-amber-600 transition-colors">
                     {collection.name}
                   </h3>
-                  <p className="text-gray-200 text-sm md:text-base leading-relaxed opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                  <p className="text-neutral-500 text-sm leading-relaxed">
                     {collection.description}
                   </p>
                 </div>
 
-                {/* CTA Button */}
                 <div className="flex justify-center">
-                  <button className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 backdrop-blur-sm border border-white/30 hover:border-white/50">
-                    Explore Legends →
-                  </button>
+                  <span className="text-sm font-bold text-neutral-900 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Explorer <span aria-hidden>→</span>
+                  </span>
                 </div>
               </div>
-
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </Link>
           ))}
         </div>
 
         {/* Featured Collection Banner */}
-        <div className="mt-20 max-w-6xl mx-auto">
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-yellow-900/50 to-gray-900"></div>
-            <div className="absolute inset-0 bg-noise opacity-10"></div>
-            
-            <div className="relative z-10 p-12 text-center">
-              <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tight">
-                LIMITED EDITION <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">LEGEND SERIES</span>
-              </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Exclusive jerseys from historic moments. Limited quantities available.
-              </p>
-              <button className="bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 text-black px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 transform border border-yellow-500">
-                🏆 VIEW EXCLUSIVES
-              </button>
-            </div>
+        <div className="mt-16 max-w-6xl mx-auto">
+          <div className="relative rounded-2xl overflow-hidden bg-neutral-950 text-white text-center p-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">
+              Édition Limitée <span className="text-amber-500">Legend Series</span>
+            </h2>
+            <p className="text-neutral-300 mb-8 max-w-2xl mx-auto">
+              Maillots exclusifs de moments historiques. Quantités limitées.
+            </p>
+            <button className="bg-amber-500 hover:bg-amber-400 text-neutral-950 px-10 py-3.5 rounded-xl font-bold transition-colors shadow-lg shadow-amber-500/10">
+              Voir les Exclusivités
+            </button>
           </div>
         </div>
 
         {/* Trust Indicators */}
-        <div className="text-center mt-16 pt-12 border-t border-gray-600/30">
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 text-sm text-gray-400">
-            <div className="flex items-center gap-3">
-              <span className="text-white text-lg">✓</span>
-              <span>Official Licensed Collections</span>
+        <div className="text-center mt-16 pt-12 border-t border-neutral-100">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-14 text-sm text-neutral-600">
+            <div className="flex items-center gap-2">
+              <span className="text-amber-500 font-bold">✓</span>
+              <span>Qualité Premium</span>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white text-lg">✓</span>
-              <span>Limited Edition Releases</span>
+            <div className="flex items-center gap-2">
+              <span className="text-amber-500 font-bold">✓</span>
+              <span>Séries en Édition Limitée</span>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white text-lg">✓</span>
-              <span>Certificate of Authenticity</span>
+            <div className="flex items-center gap-2">
+              <span className="text-amber-500 font-bold">✓</span>
+              <span>Paiement à la Livraison</span>
             </div>
           </div>
         </div>
